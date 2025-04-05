@@ -1,0 +1,67 @@
+---
+title: "CATSassigment"
+format: html
+editor: visual
+---
+
+## Preprocessing
+
+```{r}
+# Read "Train_call.txt" and convert to dataframe
+tcall_df <- read.delim("Train_call.txt")
+tcall_df <- as.data.frame(tcall_df)
+
+# Save metadata
+metadata <- tcall_df[1:4]
+
+# Make subset w/o metadata, transpose it, and make as dataframe
+tcall_sub <- subset(tcall_df, select = -c(Chromosome, Start, End, Nclone))
+tcall_sub <- t(tcall_sub)
+tcall_sub <- as.data.frame(tcall_sub)
+
+# Read "Train_clinical.txt" and convert to dataframe
+tclin_df <- read.delim("Train_clinical.txt")
+tclin_df <- as.data.frame(tclin_df)
+```
+
+```{r}
+# Create a new column "Sample" containing the arrays. Then merge both dataframes by Sample
+tcall_sub['Sample'] <- rownames(tcall_sub)
+combo <- merge(tclin_df, tcall_sub, by="Sample")
+
+# Set row names and get rid of Sample column
+row.names(combo) <- combo$Sample
+combo$Sample <- NULL
+```
+
+```{r}
+# Feature importance
+filter <- filterVarImp()
+```
+
+
+
+
+
+-------------------------------------------------------------
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
