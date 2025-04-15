@@ -19,6 +19,8 @@ combo <- merge(tclin_df, tcall_sub, by="Sample")
 row.names(combo) <- combo$Sample
 combo$Sample <- NULL
 
+library("caret")
+y = as.factor(combo[,1])
 rocVarImp <- filterVarImp(Combo[,2:2835],y)
 meanImp<-apply(rocVarImp, 1, mean)
 sortedImp<-sort(meanImp,decreasing = T)
